@@ -1,6 +1,15 @@
 import React from "react";
 
-const Card = () => {
+const Card = ({
+  role,
+  location,
+  jd,
+  minExp,
+  maxJdSalary,
+  minJdSalary,
+  logoUrl,
+  name,
+}) => {
   return (
     <>
       <main
@@ -11,6 +20,7 @@ const Card = () => {
           borderRadius: "20px",
           paddingTop: "10px",
           paddingBottom: "10px",
+          marginTop: "20px",
         }}
       >
         <section
@@ -28,9 +38,9 @@ const Card = () => {
             />
           </div>
           <div style={{ position: "relative", bottom: "20px", left: "10px" }}>
-            <p>Next Labs</p>
-            <p>Frontend Developer</p>
-            <p>India</p>
+            <p>{name}</p>
+            <p>{role}</p>
+            <p>{location}</p>
           </div>
         </section>
         <section
@@ -51,12 +61,7 @@ const Card = () => {
           }}
         >
           <h4>Job Description</h4>
-          <p>
-            React.js, a comprehensive JavaScript library for building user
-            interfaces, has changed the way we think about front-end
-            development. React.js has grasped the interest of the open source
-            community and it is here to stay. However, the nuances and
-          </p>
+          <p>{jd?.length > 250 ? jd?.substring(0, 250) : jd}</p>
         </section>
         <section
           style={{
@@ -68,7 +73,7 @@ const Card = () => {
           }}
         >
           <p>Minimum Experience</p>
-          <p>3 years</p>
+          <p> {`${minExp === null ? 0 : minExp} years`}</p>
         </section>
         <section
           style={{

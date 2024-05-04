@@ -3,6 +3,32 @@ import "./App.css";
 import Card from "./Card";
 
 function App() {
+  const [jdList, setJdList] = useState([]);
+  const [isEndOfScroll, setIsEndOfScroll] = useState(false);
+  const [offset, setOffSet] = useState(0);
+
+  useEffect(() => {
+    function handleScroll() {
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.body.scrollHeight;
+      const scrollTop =
+        window.scrollY ||
+        window.pageYOffset ||
+        document.body.scrollTop +
+          ((document.documentElement && document.documentElement.scrollTop) ||
+            0);
+
+      if (scrollTop + windowHeight >= documentHeight) {
+        setIsEndOfScroll(true);
+      } else {
+        setIsEndOfScroll(false);
+      }
+    }
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   useEffect(() => {
     const fetchData = async () => {
       const myHeaders = new Headers();
@@ -10,7 +36,7 @@ function App() {
 
       const body = JSON.stringify({
         limit: 10,
-        offset: 0,
+        offset: offset,
       });
 
       const requestOptions = {
@@ -25,18 +51,40 @@ function App() {
           requestOptions
         );
         const data = await response.text();
-        console.log(JSON.parse(data).jdList);
+        setJdList([...jdList, ...JSON.parse(data)?.jdList]);
       } catch (error) {
         console.error(error);
       }
     };
 
     fetchData();
-  }, []);
+  }, [offset]);
+
+  useEffect(() => {
+    setOffSet(offset + 1);
+  }, [isEndOfScroll]);
+
+  console.log(jdList);
 
   return (
     <>
-      <Card />
+      <div
+        style={{ display: "grid", gridTemplateColumns: "auto auto auto auto" }}
+      >
+        {jdList?.map((ele) => (
+          <Card
+            key={ele?.jdUid}
+            role={ele?.jobRole}
+            location={ele?.location}
+            jd={ele?.jobDetailsFromCompany}
+            minExp={ele?.minExp}
+            maxJdSalary={ele?.maxJdSalary}
+            minJdSalary={ele?.minJdSalary}
+            logoUrl={ele?.logoUrl}
+            name={ele?.companyName}
+          />
+        ))}
+      </div>
     </>
   );
 }
