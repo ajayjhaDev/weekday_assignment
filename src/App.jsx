@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
+import Card from "./Card";
 
 function App() {
   useEffect(() => {
@@ -33,7 +34,11 @@ function App() {
     fetchData();
   }, []);
 
-  return <></>;
+  return (
+    <>
+      <Card />
+    </>
+  );
 }
 
 export default App;
