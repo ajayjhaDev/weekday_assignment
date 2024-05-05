@@ -2,10 +2,25 @@ import React, { useEffect, useState } from "react";
 import "./App.css";
 import Card from "./Card";
 import Select from "react-select";
-const options = [
-  { value: "chocolate", label: "Chocolate" },
-  { value: "strawberry", label: "Strawberry" },
-  { value: "vanilla", label: "Vanilla" },
+const optionsRole = [
+  { value: "frontend", label: "frontend" },
+  { value: "ios", label: "ios" },
+  { value: "android", label: "android" },
+  { value: "tech lead", label: "tech lead" },
+];
+
+const optionsLocation = [
+  { value: "delhi ncr", label: "delhi ncr" },
+  { value: "mumbai", label: "mumbai" },
+  { value: "remote", label: "remote" },
+  { value: "chennai", label: "chennai" },
+];
+
+const optionsMinEx = [
+  { value: "1", label: "1" },
+  { value: "2", label: "2" },
+  { value: "3", label: "3" },
+  { value: "5", label: "5" },
 ];
 
 function App() {
@@ -14,7 +29,9 @@ function App() {
   const [offset, setOffSet] = useState(0);
   const [companyName, setCompanyName] = useState(null);
   const [persistJD, setPersistJD] = useState([]);
-  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedOptionRole, setSelectedOptionRole] = useState(null);
+  const [selectedOptionLocation, setSelectedOptionLocation] = useState(null);
+  const [selectedOptionMinEx, setSelectedOptionMinEx] = useState(null);
 
   useEffect(() => {
     function handleScroll() {
@@ -86,31 +103,57 @@ function App() {
     }
   }, [companyName]);
 
-  console.log("data", jdList, persistJD);
+  useEffect(() => {
+    if (selectedOptionLocation) {
+      setJdList(
+        persistJD?.filter((ele) =>
+          ele?.location
+            ?.toLowerCase()
+            ?.includes(selectedOptionLocation?.value?.toLowerCase())
+        )
+      );
+    } else if (selectedOptionMinEx) {
+      setJdList(
+        persistJD?.filter((ele) =>
+          String(ele?.minExp)?.includes(selectedOptionMinEx?.value)
+        )
+      );
+    } else if (selectedOptionRole) {
+      setJdList(
+        persistJD?.filter((ele) =>
+          ele?.jobRole
+            ?.toLowerCase()
+            ?.includes(selectedOptionRole?.value?.toLowerCase())
+        )
+      );
+    }
+  }, [selectedOptionLocation, selectedOptionMinEx, selectedOptionRole]);
+
+  console.log("data", jdList, persistJD, selectedOptionLocation);
   return (
     <>
       <div style={{ display: "flex" }}>
         <div style={{ width: "180px" }}>
           <Select
-            defaultValue={selectedOption}
-            onChange={setSelectedOption}
-            options={options}
+            defaultValue={selectedOptionRole}
+            onChange={setSelectedOptionRole}
+            options={optionsRole}
             placeholder={"Role"}
           />
         </div>
         <div style={{ width: "180px", marginLeft: "20px" }}>
           <Select
-            defaultValue={selectedOption}
-            onChange={setSelectedOption}
-            options={options}
+            defaultValue={selectedOptionLocation}
+            onChange={setSelectedOptionLocation}
+            options={optionsLocation}
             placeholder={"Location"}
           />
         </div>
         <div style={{ width: "180px", marginLeft: "20px" }}>
           <Select
-            defaultValue={selectedOption}
-            onChange={setSelectedOption}
-            options={options}
+            defaultValue={selectedOptionMinEx}
+            onChange={setSelectedOptionMinEx}
+            options={optionsMinEx}
             placeholder={"Min Exp"}
           />
         </div>
