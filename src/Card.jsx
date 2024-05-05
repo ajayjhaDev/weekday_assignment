@@ -9,9 +9,10 @@ const Card = ({
   minJdSalary,
   logoUrl,
   name,
+  key,
 }) => {
   return (
-    <>
+    <div key={key}>
       <main
         style={{
           border: "2px solid #edf2ef",
@@ -30,12 +31,7 @@ const Card = ({
           }}
         >
           <div>
-            <img
-              src="https://logo.clearbit.com/dropbox.com"
-              alt="img"
-              height={40}
-              width={50}
-            />
+            <img src={logoUrl} alt="img" height={40} width={50} />
           </div>
           <div style={{ position: "relative", bottom: "20px", left: "10px" }}>
             <p>{name}</p>
@@ -50,7 +46,9 @@ const Card = ({
             bottom: "50px",
           }}
         >
-          <p>Estimate Salary: ₹15 to 20 LPA</p>
+          <p>{`Estimate Salary: ₹${
+            minJdSalary === null ? 0 : minJdSalary
+          } to ${maxJdSalary} LPA`}</p>
         </section>
         <section
           style={{
@@ -100,7 +98,7 @@ const Card = ({
           </button>
         </section>
       </main>
-    </>
+    </div>
   );
 };
 
